@@ -2,23 +2,27 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
+import { LangToggle } from "@/components/lang-toggle";
 import Link from "next/link";
 import { LayoutDashboard, Users, UserCheck, CreditCard, BarChart3, Bell, LogOut, Menu, X } from "lucide-react";
-
-const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/members", label: "Members", icon: Users },
-  { href: "/admin/trainers", label: "Trainers", icon: UserCheck },
-  { href: "/admin/payments", label: "Payments", icon: CreditCard },
-  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-];
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
+  const { t } = useLang();
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifCount, setNotifCount] = useState(0);
+
+  const NAV = [
+    { href: "/admin", label: t("nav_dashboard"), icon: LayoutDashboard },
+    { href: "/admin/members", label: t("nav_members"), icon: Users },
+    { href: "/admin/trainers", label: t("nav_trainers"), icon: UserCheck },
+    { href: "/admin/payments", label: t("nav_payments"), icon: CreditCard },
+    { href: "/admin/analytics", label: t("nav_analytics"), icon: BarChart3 },
+  ];
 
   useEffect(() => {
     if (loading) return;
@@ -37,24 +41,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading || !user || user.role !== "owner") return null;
 
+  const activeLabel = NAV.find((n) => n.href === pathname || (n.href !== "/admin" && pathname.startsWith(n.href)))?.label || t("nav_dashboard");
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-black text-white flex flex-col transform transition-transform duration-200 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:flex`}>
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
-          <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center flex-shrink-0">
+      {/* Sidebar overlay */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-black text-white flex flex-col transform transition-transform duration-300 ease-in-out shadow-2xl
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:flex lg:shadow-none`}>
+        <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+          <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
             <span className="text-black font-black text-sm">CF</span>
           </div>
           <div>
-            <div className="font-bold text-sm leading-tight">City&apos;s Fitness</div>
-            <div className="text-white/40 text-xs">Admin Dashboard</div>
+            <div className="font-black text-sm leading-tight tracking-tight">City&apos;s Fitness</div>
+            <div className="text-white/40 text-xs">{t("admin_owner_label")}</div>
           </div>
-          <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden">
+          <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden p-1 rounded hover:bg-white/10 transition-colors">
             <X size={18} />
           </button>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-0.5">
           {NAV.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
             return (
@@ -62,57 +82,86 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={href}
                 href={href}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded text-sm font-medium transition-colors ${active ? "bg-white text-black" : "text-white/70 hover:text-white hover:bg-white/10"}`}
+                className={`press flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
+                  ${active ? "bg-white text-black shadow-sm" : "text-white/65 hover:text-white hover:bg-white/10"}`}
               >
-                <Icon size={17} />
+                <Icon size={17} strokeWidth={active ? 2.5 : 1.8} />
                 {label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="px-3 py-4 border-t border-white/10">
-          <div className="px-3 py-2 mb-1">
-            <div className="text-xs text-white/50">Logged in as</div>
-            <div className="text-sm font-medium truncate">{user.name}</div>
+        <div className="px-3 py-4 border-t border-white/10 space-y-1">
+          <div className="px-3 py-2">
+            <div className="text-xs text-white/40">{t("logged_in_as")}</div>
+            <div className="text-sm font-semibold truncate">{user.name}</div>
           </div>
           <button
             onClick={() => { logout(); router.push("/login"); }}
-            className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors w-full"
+            className="press flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all w-full"
           >
             <LogOut size={17} />
-            Sign Out
+            {t("sign_out")}
           </button>
         </div>
       </aside>
 
-      {/* Overlay */}
-      {sidebarOpen && <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />}
-
-      {/* Main */}
+      {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center gap-4">
-          <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
-            <Menu size={22} />
+        <header className="bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center gap-3 sticky top-0 z-30 shadow-sm">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="press lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <Menu size={20} />
           </button>
-          <h1 className="font-semibold text-gray-900">
-            {NAV.find((n) => n.href === pathname || (n.href !== "/admin" && pathname.startsWith(n.href)))?.label || "Dashboard"}
-          </h1>
-          <div className="ml-auto flex items-center gap-3">
-            <button className="relative p-2 rounded hover:bg-gray-100 transition-colors">
-              <Bell size={20} />
+          <h1 className="font-black text-base sm:text-lg tracking-tight">{activeLabel}</h1>
+          <div className="ml-auto flex items-center gap-2.5">
+            <LangToggle />
+            <button className="press relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Bell size={19} />
               {notifCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center font-bold leading-none">
+                <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-[10px] rounded-full flex items-center justify-center font-black leading-none">
                   {notifCount}
                 </span>
               )}
             </button>
-            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white text-xs font-black shadow-sm">
               {user.name.charAt(0)}
             </div>
           </div>
         </header>
-        <main className="flex-1 p-6">{children}</main>
+
+        <main className="flex-1 p-4 sm:p-6">{children}</main>
+
+        {/* Mobile bottom nav */}
+        <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-30">
+          <div className="flex px-2 py-2">
+            {NAV.map(({ href, label, icon: Icon }) => {
+              const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`press flex-1 flex flex-col items-center gap-0.5 py-1 rounded-xl text-[10px] font-semibold transition-all duration-200 relative
+                    ${active ? "text-black" : "text-gray-400"}`}
+                >
+                  {active && (
+                    <motion.div
+                      layoutId="admin-pill"
+                      className="absolute inset-x-1 top-1 h-[calc(100%-8px)] bg-gray-100 rounded-xl -z-10"
+                    />
+                  )}
+                  <Icon size={19} strokeWidth={active ? 2.5 : 1.8} />
+                  <span>{label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+
+        <div className="lg:hidden h-16" />
       </div>
     </div>
   );

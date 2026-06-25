@@ -1,75 +1,99 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
+import { LangToggle } from "@/components/lang-toggle";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const { t } = useLang();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      if (user.role === "owner") router.push("/admin");
-      else if (user.role === "trainer") router.push("/trainer");
-      else router.push("/member");
-    }
-  }, [user, router]);
+  const dashboardHref = user
+    ? user.role === "owner" ? "/admin" : user.role === "trainer" ? "/trainer" : "/member"
+    : "/login";
 
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-5 border-b border-white/10">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+      <nav className="flex items-center justify-between px-5 sm:px-8 py-5 border-b border-white/10 fade-up">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center shadow-md">
             <span className="text-black font-black text-sm">CF</span>
           </div>
-          <span className="font-bold text-lg tracking-tight">City&apos;s Fitness</span>
+          <span className="font-black text-lg tracking-tight">City&apos;s Fitness</span>
         </div>
-        <Link href="/login" className="text-sm font-medium border border-white/30 px-4 py-2 rounded hover:bg-white hover:text-black transition-colors">
-          Sign In
-        </Link>
+        <div className="flex items-center gap-3">
+          <LangToggle dark />
+          {user ? (
+            <>
+              <Link href={dashboardHref} className="press text-sm font-bold border border-white/20 px-4 py-2 rounded-xl hover:bg-white hover:text-black transition-all duration-200 shadow-sm">
+                {t("dashboard_link")}
+              </Link>
+              <button onClick={() => { logout(); router.push("/login"); }} className="press text-sm font-bold text-white/40 hover:text-white transition-colors">
+                {t("sign_out")}
+              </button>
+            </>
+          ) : (
+            <Link href="/login" className="press text-sm font-bold border border-white/20 px-4 py-2 rounded-xl hover:bg-white hover:text-black transition-all duration-200 shadow-sm">
+              {t("sign_in")}
+            </Link>
+          )}
+        </div>
       </nav>
 
       {/* Hero */}
-      <section className="flex-1 flex flex-col items-center justify-center text-center px-6 py-20">
-        <div className="inline-block border border-white/20 text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-6 text-white/60">
-          Gym Management Platform
+      <section className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16 sm:py-24">
+        <div className="fade-up delay-1 inline-block border border-white/15 text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-8 text-white/50 bg-white/5">
+          {t("landing_tagline")}
         </div>
-        <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-none">
-          YOUR GYM.<br />
-          <span className="text-white/40">YOUR CITY.</span>
+        <h1 className="fade-up delay-2 text-5xl sm:text-6xl md:text-8xl font-black tracking-tight mb-6 leading-[0.95] uppercase">
+          {t("landing_hero1")}<br />
+          <span className="text-white/25">{t("landing_hero2")}</span>
         </h1>
-        <p className="text-white/60 text-lg max-w-md mb-10">
-          Complete gym management — members, trainers, payments, and progress tracking all in one place.
+        <p className="fade-up delay-3 text-white/50 text-base sm:text-lg max-w-sm mb-10 leading-relaxed">
+          {t("landing_desc")}
         </p>
-        <Link href="/login" className="bg-white text-black font-bold px-8 py-4 rounded text-lg hover:bg-white/90 transition-colors">
-          Get Started
+        <Link
+          href={dashboardHref}
+          className="press fade-up delay-4 bg-white text-black font-black px-8 py-4 rounded-2xl text-base sm:text-lg hover:bg-white/90 transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+        >
+          {user ? t("dashboard_cta") : t("landing_cta")}
         </Link>
       </section>
 
       {/* Features */}
-      <section className="border-t border-white/10 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+      <section className="border-t border-white/10 grid grid-cols-2 md:grid-cols-4 fade-up delay-5">
         {[
-          { label: "Members", desc: "Sign-up, profiles & status" },
-          { label: "Trainers", desc: "Staff management & assignments" },
-          { label: "Payments", desc: "Subscription tracking" },
-          { label: "Progress", desc: "Body & strength metrics" },
-        ].map((f) => (
-          <div key={f.label} className="p-6">
-            <div className="font-bold mb-1">{f.label}</div>
-            <div className="text-white/50 text-sm">{f.desc}</div>
+          { label: t("landing_feat_members"), desc: t("landing_feat_members_desc") },
+          { label: t("landing_feat_trainers"), desc: t("landing_feat_trainers_desc") },
+          { label: t("landing_feat_payments"), desc: t("landing_feat_payments_desc") },
+          { label: t("landing_feat_progress"), desc: t("landing_feat_progress_desc") },
+        ].map((f, i) => (
+          <div key={f.label} className={`p-5 sm:p-7 border-r border-white/10 last:border-r-0 ${i >= 2 ? "border-t md:border-t-0 border-white/10" : ""}`}>
+            <div className="font-black text-sm mb-1">{f.label}</div>
+            <div className="text-white/40 text-xs leading-relaxed">{f.desc}</div>
           </div>
         ))}
       </section>
 
       {/* Demo credentials */}
-      <section className="border-t border-white/10 px-6 py-8 text-center">
-        <p className="text-white/40 text-sm mb-3">Demo Login Credentials</p>
-        <div className="inline-flex flex-col sm:flex-row gap-4 text-sm">
-          <span className="text-white/70"><span className="text-white font-mono">1111111111</span> / <span className="font-mono">admin123</span> — Owner</span>
-          <span className="text-white/70"><span className="text-white font-mono">2222222222</span> / <span className="font-mono">train123</span> — Trainer</span>
-          <span className="text-white/70"><span className="text-white font-mono">4444444444</span> / <span className="font-mono">mem123</span> — Member</span>
+      <section className="border-t border-white/10 px-5 py-7 fade-up delay-6">
+        <p className="text-white/30 text-xs uppercase tracking-widest mb-4 text-center">{t("landing_demo")}</p>
+        <div className="flex flex-col sm:flex-row gap-3 items-center justify-center text-xs">
+          {[
+            { role: "Owner", phone: "1111111111", pass: "admin123" },
+            { role: "Trainer", phone: "2222222222", pass: "train123" },
+            { role: "Member", phone: "4444444444", pass: "mem123" },
+          ].map((d) => (
+            <div key={d.role} className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5">
+              <span className="text-white/40">{d.role}:</span>
+              <span className="font-mono text-white font-bold">{d.phone}</span>
+              <span className="text-white/20">/</span>
+              <span className="font-mono text-white/60">{d.pass}</span>
+            </div>
+          ))}
         </div>
       </section>
     </main>

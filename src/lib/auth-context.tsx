@@ -28,16 +28,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function login(phone: string, password: string) {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone, password }),
-    });
-    const data = await res.json();
-    if (!res.ok) return { error: data.error };
-    setUser(data.user);
-    localStorage.setItem("cf_user", JSON.stringify(data.user));
-    return {};
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { error: data.error || "Login failed" };
+      setUser(data.user);
+      localStorage.setItem("cf_user", JSON.stringify(data.user));
+      return {};
+    } catch {
+      return { error: "Could not reach server. Is the app running?" };
+    }
   }
 
   function logout() {
