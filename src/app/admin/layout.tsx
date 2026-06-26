@@ -199,30 +199,31 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Mobile bottom nav */}
         <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-30">
-          <div className="flex px-2 py-2">
+          <div className="flex px-1 py-1.5">
             {NAV.map(({ href, label, icon: Icon }) => {
               const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
               return (
                 <Link
                   key={href}
                   href={href}
-                  className={`press flex-1 flex flex-col items-center gap-0.5 py-1 rounded-xl text-[10px] font-semibold transition-all duration-200 relative
+                  className={`press flex-1 flex flex-col items-center gap-0.5 py-1 px-0.5 rounded-xl transition-all duration-200 relative
                     ${active ? "text-black" : "text-gray-400"}`}
                 >
                   {active && (
                     <motion.div
                       layoutId="admin-pill"
-                      className="absolute inset-x-1 top-1 h-[calc(100%-8px)] bg-gray-100 rounded-xl -z-10"
+                      className="absolute inset-x-0.5 top-0.5 h-[calc(100%-4px)] bg-gray-100 rounded-xl -z-10"
                     />
                   )}
-                  <Icon size={19} strokeWidth={active ? 2.5 : 1.8} />
+                  <Icon size={17} strokeWidth={active ? 2.5 : 1.8} />
+                  <span className="text-[9px] font-bold leading-none truncate w-full text-center">{label}</span>
                 </Link>
               );
             })}
           </div>
         </nav>
 
-        <div className="lg:hidden h-16" />
+        <div className="lg:hidden h-[60px]" />
       </div>
     </div>
   );

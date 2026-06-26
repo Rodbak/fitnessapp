@@ -98,12 +98,12 @@ export default function PaymentsPage() {
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-2 items-center fade-up delay-2">
-        <div className="relative flex-1 min-w-[180px]">
+      <div className="flex flex-col sm:flex-row gap-2 fade-up delay-2">
+        <div className="relative flex-1">
           <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search member..." className="w-full border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-sm focus:border-black focus:outline-none transition-colors" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("payments_search")} className="w-full border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-sm focus:border-black focus:outline-none transition-colors" />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1.5 flex-wrap">
           {filters.map((f) => (
             <button key={f.key} onClick={() => setFilter(f.key)} className={`press px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${filter === f.key ? "bg-black text-white shadow-sm" : "border border-gray-200 hover:border-gray-400"}`}>
               {f.label}

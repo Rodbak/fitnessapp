@@ -105,7 +105,7 @@ export default function MembersPage() {
                   <tr key={i}><td colSpan={6} className="px-5 py-3.5"><div className="h-8 bg-gray-100 rounded-xl animate-pulse" /></td></tr>
                 ))
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={6} className="px-5 py-14 text-center text-gray-300">{t("members_none")}</td></tr>
+                <tr><td colSpan={6} className="px-5 py-14 text-center text-gray-300"><div className="flex flex-col items-center gap-2"><Search size={28} className="text-gray-200" />{t("members_none")}</div></td></tr>
               ) : filtered.map((m) => (
                 <tr key={m.id} className="hover:bg-gray-50/60 transition-colors">
                   <td className="px-5 py-4">

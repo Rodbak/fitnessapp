@@ -60,12 +60,16 @@ const en = {
 
   // Admin dashboard
   admin_owner_label: "Owner Dashboard",
-  admin_greeting: "Good morning,",
+  admin_greeting_morning: "Good morning,",
+  admin_greeting_afternoon: "Good afternoon,",
+  admin_greeting_evening: "Good evening,",
   admin_subtitle: "Here's what's happening at City's Fitness.",
   admin_total_members: "Total Members",
   admin_active_trainers: "Active Trainers",
   admin_active_revenue: "Active Revenue",
   admin_expiring: "Expiring Soon",
+  admin_expiring_banner: "subscription(s) expiring soon",
+  admin_expiring_review: "Within 30 days — tap to review",
   admin_active_sub: "active",
   admin_on_staff: "On staff",
   admin_current_subs: "Current subs",
@@ -74,6 +78,7 @@ const en = {
   admin_no_members: "No members yet",
   admin_notifications: "Notifications",
   admin_no_notifs: "No new notifications",
+  payments_search: "Search member...",
 
   // Members page
   members_title: "Members",
@@ -273,12 +278,16 @@ const fr: typeof en = {
 
   // Admin dashboard
   admin_owner_label: "Tableau de Bord Propriétaire",
-  admin_greeting: "Bonjour,",
+  admin_greeting_morning: "Bonjour,",
+  admin_greeting_afternoon: "Bonne après-midi,",
+  admin_greeting_evening: "Bonsoir,",
   admin_subtitle: "Voici ce qui se passe chez City's Fitness.",
   admin_total_members: "Total Membres",
   admin_active_trainers: "Entraîneurs Actifs",
   admin_active_revenue: "Revenus Actifs",
   admin_expiring: "Expirant Bientôt",
+  admin_expiring_banner: "abonnement(s) expirant bientôt",
+  admin_expiring_review: "Dans 30 jours — appuyer pour voir",
   admin_active_sub: "actifs",
   admin_on_staff: "En service",
   admin_current_subs: "Abonnements actifs",
@@ -287,6 +296,7 @@ const fr: typeof en = {
   admin_no_members: "Aucun membre",
   admin_notifications: "Notifications",
   admin_no_notifs: "Aucune notification",
+  payments_search: "Rechercher un membre...",
 
   // Members page
   members_title: "Membres",

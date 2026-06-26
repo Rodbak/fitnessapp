@@ -58,23 +58,30 @@ export default function MemberHome() {
 
       {/* Subscription */}
       {sub && (
-        <div className="bg-white border border-gray-100 rounded-3xl p-5 shadow-sm fade-up delay-1">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-black text-sm">{t("subscription")}</h3>
-            <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${sub.status === "active" ? "bg-black text-white" : "bg-gray-100 text-gray-500"}`}>
-              {sub.status === "active" ? t("status_active") : sub.status === "expired" ? t("status_expired") : t("status_pending")}
-            </span>
+        <div className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm fade-up delay-1">
+          <div className="bg-gray-50 px-5 pt-5 pb-4 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="font-black text-sm text-gray-500 uppercase tracking-wider">{t("subscription")}</h3>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${sub.status === "active" ? "bg-black text-white" : "bg-gray-200 text-gray-500"}`}>
+                {sub.status === "active" ? t("status_active") : sub.status === "expired" ? t("status_expired") : t("status_pending")}
+              </span>
+            </div>
+            <div className="flex items-end gap-3 mt-2">
+              <div className="text-4xl font-black capitalize tracking-tight">{sub.plan}</div>
+              <div className="text-2xl font-black text-gray-300 mb-0.5">${sub.amount}</div>
+            </div>
           </div>
-          <div className="text-3xl font-black capitalize">{sub.plan}</div>
-          <div className="text-gray-400 text-sm mt-1">${sub.amount} · Expires {sub.endDate}</div>
           {daysLeft !== null && (
-            <div className="mt-4">
-              <div className="flex justify-between text-xs text-gray-400 mb-1.5">
-                <span className="font-semibold">{daysLeft} {t("days_left")}</span>
-                <span>{sub.endDate}</span>
+            <div className="px-5 py-4">
+              <div className="flex justify-between text-xs text-gray-400 mb-2">
+                <span className="font-black text-black">{daysLeft} {t("days_left")}</span>
+                <span className="font-medium">{sub.endDate}</span>
               </div>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-black rounded-full transition-all duration-700" style={{ width: `${Math.min(100, (daysLeft / planDays) * 100)}%` }} />
+              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-700 ${daysLeft <= 7 ? "bg-red-400" : daysLeft <= 14 ? "bg-yellow-400" : "bg-black"}`}
+                  style={{ width: `${Math.min(100, (daysLeft / planDays) * 100)}%` }}
+                />
               </div>
             </div>
           )}

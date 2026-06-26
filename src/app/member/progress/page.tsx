@@ -128,9 +128,12 @@ export default function ProgressPage() {
       )}
 
       {entries.length === 0 && !showModal && (
-        <div className="bg-gray-50 rounded-3xl p-10 text-center text-gray-300 text-sm fade-up delay-1">
+        <div className="bg-gray-50 rounded-3xl p-10 text-center fade-up delay-1">
+          <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Plus size={24} className="text-gray-300" />
+          </div>
           <p className="text-base font-black mb-1.5 text-gray-400">{t("progress_none")}</p>
-          {t("progress_none_sub")}
+          <p className="text-sm text-gray-300">{t("progress_none_sub")}</p>
         </div>
       )}
 

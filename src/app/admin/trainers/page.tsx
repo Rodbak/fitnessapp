@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Plus, X, Mail, Phone } from "lucide-react";
+import { Plus, X, Mail, Phone, UserCheck } from "lucide-react";
 import type { Trainer } from "@/lib/db";
 import { useLang } from "@/lib/lang-context";
 import { Toast } from "@/components/toast";
@@ -62,7 +62,7 @@ export default function TrainersPage() {
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 h-52 animate-pulse shadow-sm" />)
         ) : trainers.length === 0 ? (
-          <div className="col-span-3 bg-gray-50 rounded-2xl p-12 text-center text-gray-300">{t("trainers_none")}</div>
+          <div className="col-span-3 bg-gray-50 rounded-2xl p-12 text-center text-gray-300 flex flex-col items-center gap-3"><UserCheck size={32} className="text-gray-200" />{t("trainers_none")}</div>
         ) : trainers.map((tr, i) => (
           <div key={tr.id} className={`bg-white border border-gray-100 rounded-2xl p-5 hover:border-gray-300 hover:shadow-lg transition-all shadow-sm fade-up delay-${Math.min(i + 1, 6)}`}>
             <div className="flex items-start justify-between mb-5">

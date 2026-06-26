@@ -115,8 +115,8 @@ export default function AnalyticsPage() {
           {statusData.length === 0 ? (
             <div className="h-40 flex items-center justify-center text-gray-300 text-sm">{t("no_data")}</div>
           ) : (
-            <div className="flex items-center gap-6">
-              <ResponsiveContainer width="50%" height={160}>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <ResponsiveContainer width="100%" height={160} className="max-w-[200px]">
                 <PieChart>
                   <Pie data={statusData} dataKey="value" cx="50%" cy="50%" outerRadius={70} innerRadius={40}>
                     {statusData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
@@ -124,12 +124,12 @@ export default function AnalyticsPage() {
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="space-y-2.5">
+              <div className="space-y-2.5 w-full sm:w-auto">
                 {statusData.map((d, i) => (
                   <div key={d.name} className="flex items-center gap-2.5 text-sm">
                     <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ background: COLORS[i % COLORS.length] }} />
                     <span className="text-gray-600">{d.name}</span>
-                    <span className="font-black ml-auto">{d.value}</span>
+                    <span className="font-black ml-auto pl-6">{d.value}</span>
                   </div>
                 ))}
               </div>
@@ -159,11 +159,11 @@ export default function AnalyticsPage() {
         {planData.length > 0 && (
           <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm lg:col-span-2 fade-up delay-5">
             <h3 className="font-black text-sm mb-5">{t("analytics_plans")}</h3>
-            <div className="flex gap-6">
+            <div className="grid grid-cols-3 gap-3">
               {planData.map((p, i) => (
-                <div key={p.name} className="flex-1 text-center">
-                  <div className="text-4xl font-black">{p.value}</div>
-                  <div className="text-sm text-gray-500 mt-1.5 font-medium">{p.name}</div>
+                <div key={p.name} className="text-center bg-gray-50 rounded-2xl p-4">
+                  <div className="text-3xl sm:text-4xl font-black">{p.value}</div>
+                  <div className="text-xs sm:text-sm text-gray-500 mt-1.5 font-semibold capitalize">{p.name}</div>
                   <div className="mt-3 h-1.5 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
                 </div>
               ))}

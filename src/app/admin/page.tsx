@@ -46,7 +46,7 @@ export default function AdminDashboard() {
   }, [user]);
 
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Good morning," : hour < 17 ? "Good afternoon," : "Good evening,";
+  const greeting = hour < 12 ? t("admin_greeting_morning") : hour < 17 ? t("admin_greeting_afternoon") : t("admin_greeting_evening");
 
   return (
     <div className="space-y-5">
@@ -99,8 +99,8 @@ export default function AdminDashboard() {
             <AlertCircle size={16} className="text-white" />
           </div>
           <div className="flex-1">
-            <div className="font-black text-sm">{stats.expiringSoon} subscription{stats.expiringSoon > 1 ? "s" : ""} expiring soon</div>
-            <div className="text-xs text-gray-400 mt-0.5">{t("admin_within_30")} — click to review</div>
+            <div className="font-black text-sm">{stats.expiringSoon} {t("admin_expiring_banner")}</div>
+            <div className="text-xs text-gray-400 mt-0.5">{t("admin_expiring_review")}</div>
           </div>
           <span className="text-xs text-gray-400 font-bold">→</span>
         </Link>
