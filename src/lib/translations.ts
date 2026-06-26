@@ -198,6 +198,17 @@ const en = {
   recent_checkins: "Recent Check-ins",
   progress_history_title: "Progress History",
   no_progress: "No progress logged yet",
+
+  // Toast messages
+  member_updated: "Member updated!",
+  member_added: "Member added!",
+  member_removed: "Member removed.",
+  trainer_updated: "Trainer updated!",
+  trainer_added: "Trainer added!",
+  trainer_removed: "Trainer removed.",
+  sub_updated: "Subscription updated!",
+  sub_created: "Subscription created!",
+  sub_deleted: "Subscription deleted.",
 };
 
 const fr: typeof en = {
@@ -400,6 +411,17 @@ const fr: typeof en = {
   recent_checkins: "Suivis Récents",
   progress_history_title: "Historique",
   no_progress: "Aucun suivi",
+
+  // Toast messages
+  member_updated: "Membre mis à jour !",
+  member_added: "Membre ajouté !",
+  member_removed: "Membre supprimé.",
+  trainer_updated: "Entraîneur mis à jour !",
+  trainer_added: "Entraîneur ajouté !",
+  trainer_removed: "Entraîneur supprimé.",
+  sub_updated: "Abonnement mis à jour !",
+  sub_created: "Abonnement créé !",
+  sub_deleted: "Abonnement supprimé.",
 };
 
 export type TranslationKey = keyof typeof en;

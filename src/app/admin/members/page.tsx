@@ -39,12 +39,12 @@ export default function MembersPage() {
       const res = await fetch(`/api/members/${editMember.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
       const updated = await res.json();
       setMembers((prev) => prev.map((m) => (m.id === editMember.id ? updated : m)));
-      setToast("Member updated!");
+      setToast(t("member_updated"));
     } else {
       const res = await fetch("/api/members", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
       const created = await res.json();
       setMembers((prev) => [...prev, created]);
-      setToast("Member added!");
+      setToast(t("member_added"));
     }
     setShowModal(false);
   }
@@ -53,7 +53,7 @@ export default function MembersPage() {
     if (!confirm(t("delete") + "?")) return;
     await fetch(`/api/members/${id}`, { method: "DELETE" });
     setMembers((prev) => prev.filter((m) => m.id !== id));
-    setToast("Member removed.");
+    setToast(t("member_removed"));
   }
 
   const trainerName = (tid?: string) => trainers.find((tr) => tr.id === tid)?.name || "—";

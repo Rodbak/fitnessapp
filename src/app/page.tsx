@@ -4,15 +4,22 @@ import { useLang } from "@/lib/lang-context";
 import { LangToggle } from "@/components/lang-toggle";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  const { user, logout } = useAuth();
+  const { user, loading } = useAuth();
   const { t } = useLang();
   const router = useRouter();
 
-  const dashboardHref = user
-    ? user.role === "owner" ? "/admin" : user.role === "trainer" ? "/trainer" : "/member"
-    : "/login";
+  useEffect(() => {
+    if (!loading && user) {
+      if (user.role === "owner") router.replace("/admin");
+      else if (user.role === "trainer") router.replace("/trainer");
+      else router.replace("/member");
+    }
+  }, [user, loading, router]);
+
+  if (loading || user) return null;
 
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
@@ -26,20 +33,9 @@ export default function Home() {
         </div>
         <div className="flex items-center gap-3">
           <LangToggle dark />
-          {user ? (
-            <>
-              <Link href={dashboardHref} className="press text-sm font-bold border border-white/20 px-4 py-2 rounded-xl hover:bg-white hover:text-black transition-all duration-200 shadow-sm">
-                {t("dashboard_link")}
-              </Link>
-              <button onClick={() => { logout(); router.push("/login"); }} className="press text-sm font-bold text-white/40 hover:text-white transition-colors">
-                {t("sign_out")}
-              </button>
-            </>
-          ) : (
-            <Link href="/login" className="press text-sm font-bold border border-white/20 px-4 py-2 rounded-xl hover:bg-white hover:text-black transition-all duration-200 shadow-sm">
-              {t("sign_in")}
-            </Link>
-          )}
+          <Link href="/login" className="press text-sm font-bold border border-white/20 px-4 py-2 rounded-xl hover:bg-white hover:text-black transition-all duration-200 shadow-sm">
+            {t("sign_in")}
+          </Link>
         </div>
       </nav>
 
@@ -56,10 +52,10 @@ export default function Home() {
           {t("landing_desc")}
         </p>
         <Link
-          href={dashboardHref}
+          href="/login"
           className="press fade-up delay-4 bg-white text-black font-black px-8 py-4 rounded-2xl text-base sm:text-lg hover:bg-white/90 transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)]"
         >
-          {user ? t("dashboard_cta") : t("landing_cta")}
+          {t("landing_cta")}
         </Link>
       </section>
 

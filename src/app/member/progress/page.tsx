@@ -121,7 +121,7 @@ export default function ProgressPage() {
               <Tooltip labelFormatter={(l) => `Date: ${l}`} />
               <Line type="monotone" dataKey="benchPress" stroke="#000" strokeWidth={2} dot={{ fill: "#000", r: 3 }} name={t("metric_bench")} />
               <Line type="monotone" dataKey="squat" stroke="#888" strokeWidth={2} dot={{ fill: "#888", r: 3 }} name={t("metric_squat")} />
-              <Line type="monotone" dataKey="deadlift" stroke="#ccc" strokeWidth={2} dot={{ fill: "#ccc", r: 3 }} name={t("metric_deadlift")} />
+              <Line type="monotone" dataKey="deadlift" stroke="#6b7280" strokeWidth={2} dot={{ fill: "#6b7280", r: 3 }} name={t("metric_deadlift")} />
             </LineChart>
           </ResponsiveContainer>
         </div>

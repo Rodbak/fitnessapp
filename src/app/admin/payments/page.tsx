@@ -44,12 +44,12 @@ export default function PaymentsPage() {
       const res = await fetch(`/api/subscriptions/${editSub.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const updated = await res.json();
       setSubs((prev) => prev.map((s) => (s.id === editSub.id ? updated : s)));
-      setToast("Subscription updated!");
+      setToast(t("sub_updated"));
     } else {
       const res = await fetch("/api/subscriptions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const created = await res.json();
       setSubs((prev) => [...prev, created]);
-      setToast("Subscription created!");
+      setToast(t("sub_created"));
     }
     setShowModal(false);
   }
@@ -58,7 +58,7 @@ export default function PaymentsPage() {
     if (!confirm(t("delete") + "?")) return;
     await fetch(`/api/subscriptions/${id}`, { method: "DELETE" });
     setSubs((prev) => prev.filter((s) => s.id !== id));
-    setToast("Subscription deleted.");
+    setToast(t("sub_deleted"));
   }
 
   const statusColor = (s: string) => s === "active" ? "bg-black text-white" : s === "expired" ? "bg-gray-100 text-gray-500" : "bg-gray-200 text-gray-600";

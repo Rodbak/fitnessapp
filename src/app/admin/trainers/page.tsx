@@ -27,12 +27,12 @@ export default function TrainersPage() {
       const res = await fetch(`/api/trainers/${editTrainer.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
       const updated = await res.json();
       setTrainers((prev) => prev.map((tr) => (tr.id === editTrainer.id ? updated : tr)));
-      setToast("Trainer updated!");
+      setToast(t("trainer_updated"));
     } else {
       const res = await fetch("/api/trainers", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
       const created = await res.json();
       setTrainers((prev) => [...prev, created]);
-      setToast("Trainer added!");
+      setToast(t("trainer_added"));
     }
     setShowModal(false);
   }
@@ -41,7 +41,7 @@ export default function TrainersPage() {
     if (!confirm(t("delete") + "?")) return;
     await fetch(`/api/trainers/${id}`, { method: "DELETE" });
     setTrainers((prev) => prev.filter((tr) => tr.id !== id));
-    setToast("Trainer removed.");
+    setToast(t("trainer_removed"));
   }
 
   return (

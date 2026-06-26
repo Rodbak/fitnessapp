@@ -38,6 +38,7 @@ export default function MemberHome() {
   }
 
   const daysLeft = sub ? Math.max(0, Math.floor((new Date(sub.endDate).getTime() - Date.now()) / 86400000)) : null;
+  const planDays = sub ? (sub.plan === "annual" ? 365 : sub.plan === "quarterly" ? 90 : 30) : 30;
 
   return (
     <div className="space-y-4">
@@ -73,7 +74,7 @@ export default function MemberHome() {
                 <span>{sub.endDate}</span>
               </div>
               <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-black rounded-full transition-all duration-700" style={{ width: `${Math.min(100, (daysLeft / 30) * 100)}%` }} />
+                <div className="h-full bg-black rounded-full transition-all duration-700" style={{ width: `${Math.min(100, (daysLeft / planDays) * 100)}%` }} />
               </div>
             </div>
           )}
