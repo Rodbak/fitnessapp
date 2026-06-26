@@ -3,23 +3,12 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { LangToggle } from "@/components/lang-toggle";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Home() {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
   const { t } = useLang();
-  const router = useRouter();
 
-  useEffect(() => {
-    if (!loading && user) {
-      if (user.role === "owner") router.replace("/admin");
-      else if (user.role === "trainer") router.replace("/trainer");
-      else router.replace("/member");
-    }
-  }, [user, loading, router]);
-
-  if (loading || user) return null;
+  if (loading) return null;
 
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
